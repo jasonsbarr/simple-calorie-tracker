@@ -16,6 +16,9 @@ App = (function(ItemController, UIController ) {
 
     // Update item
     document.querySelector(UISelectors.updateBtn).addEventListener('click', itemUpdateSubmit);
+
+    // Delete item
+    document.querySelector(UISelectors.deleteBtn).addEventListener('click', itemDeleteSubmit)
   };
 
   // Add item submit
@@ -52,8 +55,21 @@ App = (function(ItemController, UIController ) {
     const cals = parseInt(document.querySelector(UISelectors.itemCalories).value);
 
     ItemController.updateItem(id, name, cals);
-    ItemController.countCalories();
+    UIController.updateListItem(id, name, cals);
 
+    updateCalories();
+  };
+
+  const itemDeleteSubmit = function(e) {
+    e.preventDefault();
+    // Get id from form data-item-id
+    const id = parseInt(document.querySelector(UISelectors.itemForm).dataset.itemId)
+
+    // Delete from data structure
+    ItemController.deleteItem(id);
+
+    // Remove from UI
+    UIController.removeListItem(id);
   }
 
   // Update calorie count

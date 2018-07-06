@@ -39,7 +39,7 @@ const ItemController = (function() {
 
       data.totalCalories = cals;
     },
-    
+
     createItem: function(name, calories) {
       return new Item(data.items.length, name, parseInt(calories));
     },
@@ -55,6 +55,11 @@ const ItemController = (function() {
       data.items[id].calories = calories;
 
       // Update calories total
+      this.countCalories();
+    },
+
+    deleteItem: function(id) {
+      data.items.splice(data.items[id], 1);
       this.countCalories();
       console.log(data.items);
     }

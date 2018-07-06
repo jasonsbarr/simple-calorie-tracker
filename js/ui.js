@@ -96,6 +96,24 @@ const UIController = (function() {
       focusNameField();
     },
 
+    updateListItem: function(id, name, calories) {
+      // Get the correct list item
+      const listItem = document.querySelector(`#item-${id}`);
+      
+      // Update its content
+      listItem.querySelector('strong').textContent = `${name}:`;
+      listItem.querySelector('em').textContent = `${calories} Calories`;
+
+      // Reset default add state
+      this.setAddState();
+    },
+
+    removeListItem: function(id) {
+      document.querySelector(`#item-${id}`).remove();
+      this.showTotalCalories(ItemController.getTotalCalories());
+      this.setAddState();
+    },
+
     showTotalCalories: function(calories) {
       // Get total calories display element and update value
       document.querySelector(UISelectors.totalCalories).textContent = calories;
