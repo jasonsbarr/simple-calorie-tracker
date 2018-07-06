@@ -1,0 +1,3 @@
+const StorageController = (function() {
+    // Code...
+})();

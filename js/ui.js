@@ -1,0 +1,3 @@
+const UIController = (function() {
+    // Code...
+})();

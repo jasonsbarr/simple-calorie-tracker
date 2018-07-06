@@ -1,0 +1,3 @@
+const ItemController = (function() {
+    // Code...
+})();
