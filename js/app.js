@@ -27,7 +27,19 @@ App = (function(ItemController, UIController ) {
 
       // Add to #item-list
       UIController.addListItem(item);
+
+      // Update calorie count
+      updateCalories();
     }
+  };
+
+  // Update calorie count
+  const updateCalories = function() {
+    // Get new calorie count
+    let cals = ItemController.getTotalCalories();
+
+    // Update total in UI
+    UIController.showTotalCalories(cals);
   };
 
   // Expose public methods & properties
@@ -37,11 +49,21 @@ App = (function(ItemController, UIController ) {
       // Get items from data structure
        const items = ItemController.getItems();
 
-       // Populate list with items
-       UIController.populateItemsList(items);
+      // Check if there are any items, if not then hide list element
+      if (items.length === 0) {
+        UIController.hideItemsList();
+      } else {
+        // Make sure list is visible
+        UIController.showItemsList();
+        // Populate list with items
+        UIController.populateItemsList();
+      }
 
-       // Load event listeners
-       loadEventListeners();
+      // Set total calorie count
+      updateCalories();
+
+      // Load event listeners
+      loadEventListeners();
     }
   }
 })(ItemController, UIController);

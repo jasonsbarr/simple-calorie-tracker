@@ -17,6 +17,11 @@ const ItemController = (function() {
     totalCalories: 0
   };
 
+    const countCalories = function() {
+      data.totalCalories = 0;
+      data.items.forEach(item => data.totalCalories += item.calories);
+    };
+
   return {
     getItems: function() {
       return data.items;
@@ -26,12 +31,18 @@ const ItemController = (function() {
       return data;
     },
 
+    getTotalCalories: function() {
+      return data.totalCalories;
+    },
+
     createItem: function(name, calories) {
       return new Item(data.items.length, name, parseInt(calories));
     },
 
     addItem: function(item) {
       data.items.push(item);
+      countCalories();
     }
+
   };
 })();

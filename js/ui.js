@@ -4,7 +4,8 @@ const UIController = (function() {
     itemList: '#item-list',
     addBtn: '.add-btn',
     itemName: '#item-name',
-    itemCalories: '#item-calories'
+    itemCalories: '#item-calories',
+    totalCalories: '.total-calories'
   };
 
   
@@ -53,7 +54,21 @@ const UIController = (function() {
       document.querySelector(UISelectors.itemList).innerHTML = '';
     },
 
+    hideItemsList: function() {
+      document.querySelector(UISelectors.itemList).style.display = 'none';
+    },
+    
+    showItemsList: function() {
+      document.querySelector(UISelectors.itemList).style.display = 'block';
+    },
+
     addListItem: function(item) {
+      // Make sure list is visible
+      if (document.querySelector(UISelectors.itemList).style.display === 'none') {
+        this.showItemsList();
+      }
+
+      // Create li and add necessary id + class
       const li = document.createElement('li');
       li.classList.add('collection-item');
       li.id = `item-${item.id}`;
@@ -64,6 +79,11 @@ const UIController = (function() {
 
       document.querySelector(UISelectors.itemList).appendChild(li);
       this.clearAddForm();
+    },
+
+    showTotalCalories: function(calories) {
+      // Get total calories display element and update value
+      document.querySelector(UISelectors.totalCalories).textContent = calories;
     }
   }
 })();
