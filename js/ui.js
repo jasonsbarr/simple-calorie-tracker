@@ -28,7 +28,6 @@ const UIController = (function() {
     // Clear add item form
     clearAddForm: function() {
       document.querySelector(UISelectors.itemName).value = '';
-      document.querySelector(UISelectors.itemName).focus();
       document.querySelector(UISelectors.itemCalories).value = '';
     },
 
@@ -72,18 +71,29 @@ const UIController = (function() {
       const li = document.createElement('li');
       li.classList.add('collection-item');
       li.id = `item-${item.id}`;
+      
+      // Set inner content
       li.innerHTML = `
         <strong>${item.name}:</strong> <em>${item.calories} Calories</em>
         <a href="#" class="secondary-content"><i class="edit-item fa fa-pencil"></i></a>
       `;
 
+      // Add to list
       document.querySelector(UISelectors.itemList).appendChild(li);
+
+      // Clear add form and focus item-name for next item
       this.clearAddForm();
+      document.querySelector(UISelectors.itemName).focus();
     },
 
     showTotalCalories: function(calories) {
       // Get total calories display element and update value
       document.querySelector(UISelectors.totalCalories).textContent = calories;
+    },
+
+    clearEditState: function() {
+      // Clear add form
+      this.clearAddForm();
     }
   }
 })();
