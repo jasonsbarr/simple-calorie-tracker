@@ -3,10 +3,25 @@ const UIController = (function() {
   const UISelectors = {
     itemList: '#item-list',
     addBtn: '.add-btn',
+    itemForm: '#item-form',
+    updateBtn: '.update-btn',
+    deleteBtn: '.delete-btn',
+    backBtn: '.back-btn',
+    clearBtn: '.clear-btn',
+    editItem: '.edit-item',
     itemName: '#item-name',
     itemCalories: '#item-calories',
     totalCalories: '.total-calories'
   };
+  // Clear add item form
+  const clearAddForm = function() {
+    document.querySelector(UISelectors.itemName).value = '';
+    document.querySelector(UISelectors.itemCalories).value = '';
+  };
+
+  const focusNameField = function() {
+    document.querySelector(UISelectors.itemName).focus();
+  }
 
   
   return {
@@ -25,11 +40,6 @@ const UIController = (function() {
       return input;
     },
     
-    // Clear add item form
-    clearAddForm: function() {
-      document.querySelector(UISelectors.itemName).value = '';
-      document.querySelector(UISelectors.itemCalories).value = '';
-    },
 
     // Populate list of items
     populateItemsList: function(items) {
@@ -82,8 +92,8 @@ const UIController = (function() {
       document.querySelector(UISelectors.itemList).appendChild(li);
 
       // Clear add form and focus item-name for next item
-      this.clearAddForm();
-      document.querySelector(UISelectors.itemName).focus();
+      clearAddForm();
+      focusNameField();
     },
 
     showTotalCalories: function(calories) {
@@ -91,9 +101,52 @@ const UIController = (function() {
       document.querySelector(UISelectors.totalCalories).textContent = calories;
     },
 
-    clearEditState: function() {
+    setAddState: function(e) {
+      // Keep page from reloading on click
+      if (e !== undefined) {
+        e.preventDefault();
+      }
+
       // Clear add form
-      this.clearAddForm();
+      clearAddForm();
+
+      // Hide update, delete, and back buttons and show add button
+      document.querySelector(UISelectors.updateBtn).style.display = 'none';
+      document.querySelector(UISelectors.deleteBtn).style.display = 'none';
+      document.querySelector(UISelectors.backBtn).style.display = 'none';
+      document.querySelector(UISelectors.addBtn).style.display = 'inline-block';
+    },
+
+    setEditState: function(e) {
+      // Check if click is on edit button
+      if (e.target.matches(UISelectors.editItem)) {
+        e.preventDefault();
+
+        // Clear add form
+        clearAddForm();
+
+        // Hide add button
+        document.querySelector(UISelectors.addBtn).style.display = 'none';
+
+        // Show edit state buttons
+        document.querySelector(UISelectors.updateBtn).style.display = 'inline-block';
+        document.querySelector(UISelectors.deleteBtn).style.display = 'inline-block';
+        document.querySelector(UISelectors.backBtn).style.display = 'inline-block';
+
+        // Get item properties from list-item and set as field values
+        const li = e.target.parentElement.parentElement;
+        const name = li.querySelector('strong').textContent;
+        const cals = li.querySelector('em').textContent;
+        document.querySelector(UISelectors.itemName).value = name.replace(':', '');
+        document.querySelector(UISelectors.itemCalories).value = cals.split(' ')[0];
+
+        // Get item ID and set as data attribute on form
+        const id = parseInt(li.id.slice(li.id.indexOf('-') + 1));
+        document.querySelector(UISelectors.itemForm).setAttribute('data-item-id', id);
+
+        // Focus item-name field
+        focusNameField();
+      }
     }
   }
 })();
