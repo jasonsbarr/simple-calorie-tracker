@@ -85,7 +85,7 @@ const UIController = (function() {
       const li = document.createElement('li');
       li.classList.add('collection-item');
       li.id = `item-${item.id}`;
-      
+
       // Set inner content
       li.innerHTML = `
         <strong>${item.name}:</strong> <em>${item.calories} Calories</em>
