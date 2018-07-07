@@ -5,7 +5,10 @@ const ItemController = (function() {
     this.name = name;
     this.calories = calories;
   };
-
+  
+  const fetchItems = function() {
+    data.items = StorageController.getAllItems();
+  };
   // Data structure/state
   const data = {
     items: [
@@ -18,7 +21,9 @@ const ItemController = (function() {
   };
 
   return {
+
     getItems: function() {
+      fetchItems();
       return data.items;
     },
 
@@ -55,11 +60,13 @@ const ItemController = (function() {
     
     addItem: function(item) {
       data.items.push(item);
+      StorageController.addItem(item);
     },
 
     updateItem: function(item) {
       // Get item from data.items and set item properties
       data.items[item.id] = item;
+      StorageController.updateItem(item);
     },
 
     deleteItem: function(id) {

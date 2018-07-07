@@ -126,7 +126,7 @@ App = (function(ItemController, UIController ) {
       UIController.setAddState();
 
       // Get items from data structure
-       const items = ItemController.getItems();
+      const items = ItemController.getItems();
 
       // Check if there are any items, if not then hide list element
       if (items.length === 0) {
