@@ -9,9 +9,9 @@ const ItemController = (function() {
   // Data structure/state
   const data = {
     items: [
-      { id: 0, name: 'Steak Dinner', calories: '1000' },
-      { id: 1, name: 'Eggs', calories: '300' },
-      { id: 2, name: 'Cookie', calories: '400' }
+      // { id: 0, name: 'Steak Dinner', calories: '1000' },
+      // { id: 1, name: 'Eggs', calories: '300' },
+      // { id: 2, name: 'Cookie', calories: '400' }
     ],
     currentItem: null,
     totalCalories: 0
@@ -58,25 +58,19 @@ const ItemController = (function() {
     
     addItem: function(item) {
       data.items.push(item);
-      this.countCalories();
     },
 
     updateItem: function(item) {
       // Get item from data.items and set item properties
       data.items[item.id] = item;
-
-      // Update calories total
-      this.countCalories();
     },
 
     deleteItem: function(id) {
       data.items.splice(id, 1);
-      this.countCalories();
     },
 
     deleteAllItems: function() {
       data.items = [];
-      this.countCalories();
     }
   };
 })();

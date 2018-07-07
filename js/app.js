@@ -98,6 +98,7 @@ App = (function(ItemController, UIController ) {
 
     // Remove from UI
     UIController.removeListItem(id);
+    updateCalories();
   };
 
   const clearAllItems = function(e) {
@@ -105,10 +106,14 @@ App = (function(ItemController, UIController ) {
 
     ItemController.deleteAllItems();
     UIController.clearItemsList();
+    updateCalories();
   };
 
   // Update calorie count
   const updateCalories = function() {
+    // Count calories and set in ItemController
+    ItemController.countCalories();
+
     // Get new calorie count and update total in UI
     UIController.showTotalCalories(ItemController.getTotalCalories());
   };
@@ -134,7 +139,6 @@ App = (function(ItemController, UIController ) {
       }
 
       // Set total calorie count
-      ItemController.countCalories();
       updateCalories();
 
       // Load event listeners
