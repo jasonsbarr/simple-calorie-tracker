@@ -7,7 +7,7 @@ const ItemController = (function() {
   };
   
   const fetchItems = function() {
-    data.items = StorageController.getAllItems();
+    return StorageController.getAllItems();
   };
   // Data structure/state
   const data = {
@@ -23,7 +23,9 @@ const ItemController = (function() {
   return {
 
     getItems: function() {
-      fetchItems();
+      if (data.items.length === 0) {
+        data.items = fetchItems();
+      }
       return data.items;
     },
 
