@@ -9,16 +9,19 @@ App = (function(ItemController, UIController ) {
     document.querySelector(UISelectors.addBtn).addEventListener('click', itemAddSubmit);
 
     // Change to edit item state
-    document.querySelector(UISelectors.itemList).addEventListener('click', UIController.setEditState.bind(UIController));
+    document.querySelector(UISelectors.itemList).addEventListener('click', itemEdit);
 
     // Change to add item state without updating item
-    document.querySelector(UISelectors.backBtn).addEventListener('click', UIController.setAddState.bind(UIController));
+    document.querySelector(UISelectors.backBtn).addEventListener('click', itemNoUpdate);
 
     // Update item
     document.querySelector(UISelectors.updateBtn).addEventListener('click', itemUpdateSubmit);
 
     // Delete item
-    document.querySelector(UISelectors.deleteBtn).addEventListener('click', itemDeleteSubmit)
+    document.querySelector(UISelectors.deleteBtn).addEventListener('click', itemDeleteSubmit);
+
+    // Clear all items
+    document.querySelector(UISelectors.clearBtn).addEventListener('click', clearAllItems)
   };
 
   // Add item submit
@@ -46,31 +49,63 @@ App = (function(ItemController, UIController ) {
     }
   };
 
+  const itemEdit = function(e) {
+    e.preventDefault();
+
+    if (e.target.matches(UISelectors.editItem)) {
+      const li = UIController.getListItem(e.target);
+      UIController.setEditState(li);
+      ItemController.setCurrentItem(UIController.getItemId(li));
+    }
+  };
+
+  const itemNoUpdate = function(e) {
+    // Keep page from reloading on click
+    e.preventDefault();
+
+    UIController.setAddState();
+  };
+
   const itemUpdateSubmit = function(e) {
     e.preventDefault();
 
-    // Get item properties from form
-    const id = parseInt(document.querySelector(UISelectors.itemForm).dataset.itemId);
-    const name = document.querySelector(UISelectors.itemName).value;
-    const cals = parseInt(document.querySelector(UISelectors.itemCalories).value);
+    // Get current item id
+    const id = ItemController.getCurrentItem();
 
-    ItemController.updateItem(id, name, cals);
-    UIController.updateListItem(id, name, cals);
+    // Get item properties from form
+    const input = UIController.getItemInput();
+
+    // Create item
+    const item = ItemController.getItem(id);
+    
+    // Update item properties
+    item.name = input.name;
+    item.calories = input.calories;
+
+    ItemController.updateItem(item);
+    UIController.updateListItem(item);
 
     updateCalories();
   };
 
   const itemDeleteSubmit = function(e) {
     e.preventDefault();
-    // Get id from form data-item-id
-    const id = parseInt(document.querySelector(UISelectors.itemForm).dataset.itemId)
+    // Get current item
+    const id = parseInt(ItemController.getCurrentItem());
 
     // Delete from data structure
     ItemController.deleteItem(id);
 
     // Remove from UI
     UIController.removeListItem(id);
-  }
+  };
+
+  const clearAllItems = function(e) {
+    e.preventDefault();
+
+    ItemController.deleteAllItems();
+    UIController.clearItemsList();
+  };
 
   // Update calorie count
   const updateCalories = function() {

@@ -21,9 +21,8 @@ const UIController = (function() {
 
   const focusNameField = function() {
     document.querySelector(UISelectors.itemName).focus();
-  }
+  };
 
-  
   return {
     // Get UI Selectors
     getSelectors: function() {
@@ -60,7 +59,12 @@ const UIController = (function() {
     },
 
     clearItemsList: function() {
-      document.querySelector(UISelectors.itemList).innerHTML = '';
+      const listItems = document.querySelectorAll('.collection-item');
+
+      listItems.forEach(item => item.remove());
+      
+      // Reset calorie count
+      document.querySelector(UISelectors.totalCalories).textContent = '0';
     },
 
     hideItemsList: function() {
@@ -96,13 +100,13 @@ const UIController = (function() {
       focusNameField();
     },
 
-    updateListItem: function(id, name, calories) {
+    updateListItem: function(item) {
       // Get the correct list item
-      const listItem = document.querySelector(`#item-${id}`);
+      const listItem = document.querySelector(`#item-${item.id}`);
       
       // Update its content
-      listItem.querySelector('strong').textContent = `${name}:`;
-      listItem.querySelector('em').textContent = `${calories} Calories`;
+      listItem.querySelector('strong').textContent = `${item.name}:`;
+      listItem.querySelector('em').textContent = `${item.calories} Calories`;
 
       // Reset default add state
       this.setAddState();
@@ -119,52 +123,64 @@ const UIController = (function() {
       document.querySelector(UISelectors.totalCalories).textContent = calories;
     },
 
-    setAddState: function(e) {
-      // Keep page from reloading on click
-      if (e !== undefined) {
-        e.preventDefault();
-      }
-
+    setAddState: function() {
       // Clear add form
       clearAddForm();
 
-      // Hide update, delete, and back buttons and show add button
+      // Hide and disable update, delete, and back buttons
       document.querySelector(UISelectors.updateBtn).style.display = 'none';
       document.querySelector(UISelectors.deleteBtn).style.display = 'none';
       document.querySelector(UISelectors.backBtn).style.display = 'none';
+
+      document.querySelector(UISelectors.updateBtn).disabled = true;
+      document.querySelector(UISelectors.deleteBtn).disabled = true;
+      document.querySelector(UISelectors.backBtn).disabled = true;
+
+      // Show add button, enable, and set to submit
       document.querySelector(UISelectors.addBtn).style.display = 'inline-block';
+      document.querySelector(UISelectors.addBtn).removeAttribute('disabled');
+      document.querySelector(UISelectors.addBtn).type = 'submit';
+
+      // Focus add-name field
+      document.querySelector(UISelectors.itemName).focus();
     },
 
-    setEditState: function(e) {
-      // Check if click is on edit button
-      if (e.target.matches(UISelectors.editItem)) {
-        e.preventDefault();
+    setEditState: function(li) {
+      // Clear add form
+      clearAddForm();
 
-        // Clear add form
-        clearAddForm();
+      // Hide and disable add button
+      document.querySelector(UISelectors.addBtn).style.display = 'none';
+      document.querySelector(UISelectors.addBtn).type = 'button';
+      document.querySelector(UISelectors.addBtn).disabled = true;
 
-        // Hide add button
-        document.querySelector(UISelectors.addBtn).style.display = 'none';
+      // Show and enable edit state buttons, set updateBtn to submit
+      document.querySelector(UISelectors.updateBtn).style.display = 'inline-block';
+      document.querySelector(UISelectors.deleteBtn).style.display = 'inline-block';
+      document.querySelector(UISelectors.backBtn).style.display = 'inline-block';
 
-        // Show edit state buttons
-        document.querySelector(UISelectors.updateBtn).style.display = 'inline-block';
-        document.querySelector(UISelectors.deleteBtn).style.display = 'inline-block';
-        document.querySelector(UISelectors.backBtn).style.display = 'inline-block';
+      document.querySelector(UISelectors.updateBtn).removeAttribute('disabled');
+      document.querySelector(UISelectors.deleteBtn).removeAttribute('disabled');
+      document.querySelector(UISelectors.backBtn).removeAttribute('disabled');
 
-        // Get item properties from list-item and set as field values
-        const li = e.target.parentElement.parentElement;
-        const name = li.querySelector('strong').textContent;
-        const cals = li.querySelector('em').textContent;
-        document.querySelector(UISelectors.itemName).value = name.replace(':', '');
-        document.querySelector(UISelectors.itemCalories).value = cals.split(' ')[0];
+      document.querySelector(UISelectors.updateBtn).type = 'submit';
 
-        // Get item ID and set as data attribute on form
-        const id = parseInt(li.id.slice(li.id.indexOf('-') + 1));
-        document.querySelector(UISelectors.itemForm).setAttribute('data-item-id', id);
+      // Get item properties from list-item and set as field values
+      const name = li.querySelector('strong').textContent;
+      const cals = li.querySelector('em').textContent;
+      document.querySelector(UISelectors.itemName).value = name.replace(':', '');
+      document.querySelector(UISelectors.itemCalories).value = cals.split(' ')[0];
 
-        // Focus item-name field
-        focusNameField();
-      }
+      // Focus item-name field
+      focusNameField();
+    },
+
+    getListItem: function(target) {
+      return target.parentElement.parentElement;
+    },
+    
+    getItemId: function(li) {
+      return li.id.slice(li.id.indexOf('-') + 1);
     }
   }
 })();

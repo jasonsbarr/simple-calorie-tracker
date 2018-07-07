@@ -25,6 +25,10 @@ const ItemController = (function() {
       return data.items;
     },
 
+    getItem: function(id) {
+      return data.items[id];
+    },
+
     getData: function() {
       return data;
     },
@@ -33,11 +37,19 @@ const ItemController = (function() {
       return data.totalCalories;
     },
 
+    getCurrentItem: function() {
+      return data.currentItem;
+    },
+
     countCalories: function() {
       let cals = 0;
       data.items.forEach(item => cals += parseInt(item.calories));
 
       data.totalCalories = cals;
+    },
+
+    setCurrentItem: function(id) {
+      data.currentItem = parseInt(id);
     },
 
     createItem: function(name, calories) {
@@ -49,19 +61,22 @@ const ItemController = (function() {
       this.countCalories();
     },
 
-    updateItem: function(id, name, calories) {
+    updateItem: function(item) {
       // Get item from data.items and set item properties
-      data.items[id].name = name;
-      data.items[id].calories = calories;
+      data.items[item.id] = item;
 
       // Update calories total
       this.countCalories();
     },
 
     deleteItem: function(id) {
-      data.items.splice(data.items[id], 1);
+      data.items.splice(id, 1);
       this.countCalories();
-      console.log(data.items);
+    },
+
+    deleteAllItems: function() {
+      data.items = [];
+      this.countCalories();
     }
   };
 })();
