@@ -180,7 +180,7 @@ const UIController = (function() {
     },
     
     getItemId: function(li) {
-      return li.id.slice(li.id.indexOf('-') + 1);
+      return li.id.split('-')[1];
     }
   }
 })();
