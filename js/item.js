@@ -17,9 +17,6 @@ const ItemController = (function() {
     totalCalories: 0
   };
 
-    const countCalories = function() {
-    };
-
   return {
     getItems: function() {
       return data.items;
