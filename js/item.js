@@ -71,10 +71,12 @@ const ItemController = (function() {
 
     deleteItem: function(id) {
       data.items.splice(id, 1);
+      StorageController.deleteItem(id);
     },
 
     deleteAllItems: function() {
       data.items = [];
+      StorageController.deleteAllItems();
     }
   };
 })();

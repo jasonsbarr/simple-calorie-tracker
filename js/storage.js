@@ -31,6 +31,18 @@ const StorageController = (function() {
       items[item.id] = item;
 
       storeItems(items);
+    },
+
+    deleteItem: function(id) {
+      const items = this.getAllItems();
+
+      items.splice(id, 1);
+
+      storeItems(items);
+    },
+
+    deleteAllItems: function() {
+      localStorage.clear('items');
     }
 
   };
