@@ -35,7 +35,7 @@ App = (function(ItemController, UIController ) {
       // Create new item
       const item = new ItemController.createItem(
         input.name,
-        input.calories
+        parseInt(input.calories)
       );
 
       // Add to data.items
@@ -80,7 +80,7 @@ App = (function(ItemController, UIController ) {
     
     // Update item properties
     item.name = input.name;
-    item.calories = input.calories;
+    item.calories = parseInt(input.calories);
 
     ItemController.updateItem(item);
     UIController.updateListItem(item);
